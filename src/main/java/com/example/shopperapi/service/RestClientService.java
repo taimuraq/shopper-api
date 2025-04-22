@@ -1,32 +1,35 @@
 package com.example.shopperapi.service;
 
 import com.example.shopperapi.config.ExternalServicesConfig;
-import com.example.shopperapi.util.DependencyTracker;
-import org.springframework.beans.factory.annotation.Qualifier;
+import com.example.shopperapi.model.User;
+import com.example.shopperapi.tracking.DependencyTracker;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+@Slf4j
 @Service
 public class RestClientService {
 
-  private final ExternalServicesConfig config;
   private final RestTemplate restTemplate;
+  private final ExternalServicesConfig externalServicesConfig;
 
-  public RestClientService(@Qualifier("externalServicesConfig")ExternalServicesConfig config) {
-    this.config = config;
-    this.restTemplate = new RestTemplate();
+  private final DependencyTracker dependencyTracker;
+
+  public RestClientService(RestTemplate restTemplate, DependencyTracker dependencyTracker, ExternalServicesConfig externalServicesConfig) {
+    this.dependencyTracker = dependencyTracker;
+    this.restTemplate = restTemplate;
+    this.externalServicesConfig = externalServicesConfig;
   }
 
-  public <T> T get(String serviceName, String endpoint, Class<T> responseType) {
-    String baseUrl = config.getServiceUrl(serviceName);
-    String url = baseUrl + endpoint;
+  public User getUser(String userId) {
+//    String originApi = RequestContextTracker.getCurrentApi();
+    String target = externalServicesConfig.getServices().get("userdataapi").getBaseUrl() + "/users/" + userId;
+//    dependencyTracker.track("UserdataAPI", );
+//    log.info("External Call → GET {} | Called by → {}", target, originApi);
 
-    // Track the dependency
-    DependencyTracker.track(serviceName, "GET", endpoint);
-
-    return restTemplate.getForObject(url, responseType);
+    return restTemplate.getForObject(target, User.class);
   }
-
-  // You can add post/put/etc. later here
 }
+
 

@@ -31,6 +31,6 @@ public class CartService {
   }
 
   public User fetchUserById(String userId) {
-    return restClientService.get("userdataapi", "/users/" + userId, User.class);
+    return restClientService.getUser(userId);
   }
 }
