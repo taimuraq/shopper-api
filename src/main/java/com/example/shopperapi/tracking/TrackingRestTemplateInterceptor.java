@@ -24,7 +24,9 @@ public class TrackingRestTemplateInterceptor implements ClientHttpRequestInterce
     // Optional placeholder for fields - can be enhanced with response introspection
     List<String> fieldsUsed = List.of("id", "email");
 
-    DependencyTracker.recordExternalCall(service, method, path, null, fieldsUsed);
+    List<String> internalTrace = RequestContextTracker.getCurrentInternalTrace();
+    DependencyTracker.recordExternalCall(service, method, path, null, internalTrace);
+    RequestContextTracker.clear();
 
     return response;
   }

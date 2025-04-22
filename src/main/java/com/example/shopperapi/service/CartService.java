@@ -3,6 +3,7 @@ package com.example.shopperapi.service;
 import com.example.shopperapi.dao.CartDao;
 import com.example.shopperapi.model.Cart;
 import com.example.shopperapi.model.User;
+import com.example.shopperapi.tracking.RequestContextTracker;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,6 +19,7 @@ public class CartService {
   }
 
   public Cart getCartById(String id) {
+    RequestContextTracker.recordMethod(getCurrentMethod());
     Cart cart = cartDao.getCartById(id);
     if (cart != null) {
       User user = fetchUserById(cart.getUserId());
@@ -32,5 +34,9 @@ public class CartService {
 
   public User fetchUserById(String userId) {
     return restClientService.getUser(userId);
+  }
+
+  private String getCurrentMethod() {
+    return this.getClass().getSimpleName() + "." + Thread.currentThread().getStackTrace()[2].getMethodName();
   }
 }
