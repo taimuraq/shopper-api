@@ -26,7 +26,7 @@ public class TrackingRestTemplateInterceptor implements ClientHttpRequestInterce
 
     List<String> internalTrace = RequestContextTracker.getCurrentInternalTrace();
     DependencyTracker.recordExternalCall(service, method, path, null, internalTrace);
-    RequestContextTracker.clear();
+//    RequestContextTracker.clear();
 
     return response;
   }

@@ -29,7 +29,7 @@ public class ApiTrackingInterceptor implements HandlerInterceptor {
 
   @Override
   public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-    RequestContextTracker.clear();
+//    RequestContextTracker.clear();
   }
 }
 
