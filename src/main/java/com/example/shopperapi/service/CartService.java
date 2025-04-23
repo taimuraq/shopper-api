@@ -2,6 +2,7 @@ package com.example.shopperapi.service;
 
 import com.example.shopperapi.dao.CartDao;
 import com.example.shopperapi.model.Cart;
+import com.example.shopperapi.model.CompanySettings;
 import com.example.shopperapi.model.User;
 import com.example.shopperapi.tracking.RequestContextTracker;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,17 @@ public class CartService {
   }
 
   public Cart createCart(Cart cart) {
+    RequestContextTracker.recordMethod(getCurrentMethod());
+
+    //assume it needs to fetch company settings
+    CompanySettings companySettings = fetchCompanySettingsByUnitId("1");
+    //assumr we have userId
+    User user = fetchUserById(cart.getUserId());
     return cartDao.createCart(cart);
+  }
+
+  private CompanySettings fetchCompanySettingsByUnitId(String unitId) {
+    return restClientService.getCompanySettings(unitId);
   }
 
   public User fetchUserById(String userId) {

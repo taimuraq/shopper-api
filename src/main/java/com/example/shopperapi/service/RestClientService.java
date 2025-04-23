@@ -1,6 +1,7 @@
 package com.example.shopperapi.service;
 
 import com.example.shopperapi.config.ExternalServicesConfig;
+import com.example.shopperapi.model.CompanySettings;
 import com.example.shopperapi.model.User;
 import com.example.shopperapi.tracking.DependencyTracker;
 import com.example.shopperapi.tracking.RequestContextTracker;
@@ -25,6 +26,12 @@ public class RestClientService {
     RequestContextTracker.recordMethod(getCurrentMethod());
     String target = externalServicesConfig.getServices().get("userdataapi").getBaseUrl() + "/users/" + userId;
     return restTemplate.getForObject(target, User.class);
+  }
+
+  public CompanySettings getCompanySettings(String unitId) {
+    RequestContextTracker.recordMethod(getCurrentMethod());
+    String target = externalServicesConfig.getServices().get("userdataapi").getBaseUrl() + "/companysettings/unit-id/" + unitId;
+    return restTemplate.getForObject(target, CompanySettings.class);
   }
 
 
